@@ -116,8 +116,8 @@ export default function Navbar({ showFitOn = true, isDarkBg = false }) {
           {/* Right Section - Menu and Icons */}
           <div className="flex items-center gap-8">
             {/* Menu */}
-            <div className="hidden md:flex gap-10 text-[16px] font-semibold" style={{
-              color: isDarkBg || currentScrollY > 0 ? '#FFFFFF' : '#000000',
+            <div className="hidden md:flex gap-10 text-[14px] font-light" style={{
+              color: '#FFFFFF',
               letterSpacing: '0.5px',
               textTransform: 'uppercase'
             }}>
@@ -152,19 +152,19 @@ export default function Navbar({ showFitOn = true, isDarkBg = false }) {
               
               {/* Fit On - Only visible when logged in and showFitOn is true */}
               {isLoggedIn && showFitOn && (
-                <span className="cursor-pointer font-semibold transition-colors hover:opacity-70" style={{color: currentScrollY > 0 ? '#FFFFFF' : '#000000', textTransform: 'uppercase', letterSpacing: '0.5px'}}>
+                <span className="cursor-pointer font-semibold transition-colors hover:opacity-70" style={{color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.5px'}}>
                   Fit On
                 </span>
               )}
             </div>
 
             {/* Icons */}
-            <div className="flex gap-6 text-xl relative" style={{color: isDarkBg || currentScrollY > 0 ? '#FFFFFF' : '#000000'}}>
+            <div className="flex gap-6 text-2xl relative" style={{color: '#FFFFFF'}}>
             {/* Search */}
             <div ref={searchRef} className="relative">
               <button
                 onClick={() => setShowSearch(!showSearch)}
-                className="cursor-pointer transition-all duration-300 hover:opacity-70 w-6 h-6 flex items-center justify-center rounded-lg hover:bg-opacity-10"
+                className="cursor-pointer transition-all duration-300 hover:opacity-70 w-4 h-4 flex items-center justify-center rounded-lg hover:bg-opacity-10"
                 style={{background: isDarkBg || currentScrollY > 0 ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}}
                 title="Search"
               >
@@ -252,7 +252,7 @@ export default function Navbar({ showFitOn = true, isDarkBg = false }) {
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
                   title="Menu"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
@@ -295,7 +295,7 @@ export default function Navbar({ showFitOn = true, isDarkBg = false }) {
             
             <button
               onClick={() => navigate('/cart')}
-              className="cursor-pointer transition-colors duration-300 hover:opacity-70 w-6 h-6 flex items-center justify-center"
+              className="cursor-pointer transition-colors duration-300 hover:opacity-70 w-4 h-4 flex items-center justify-center"
               title="Shopping Cart"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
