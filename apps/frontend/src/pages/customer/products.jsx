@@ -131,11 +131,38 @@ export default function Products() {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-8px); }
         }
+        .products-shell {
+          background:
+            radial-gradient(circle at top left, rgba(201, 162, 39, 0.22), transparent 28%),
+            radial-gradient(circle at bottom right, rgba(201, 162, 39, 0.12), transparent 30%),
+            linear-gradient(180deg, #ffffff 0%, #fff8e8 52%, #f9efcf 100%);
+        }
+        .products-hero {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 239, 203, 0.98) 55%, rgba(201, 162, 39, 0.96) 100%);
+          border-bottom: 1px solid rgba(201, 162, 39, 0.34);
+          box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+        }
+        .products-hero-title {
+          color: #111827;
+          letter-spacing: 2px;
+        }
+        .hero-ash-band {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 22px;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(232, 232, 232, 0.5) 100%);
+          clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+          opacity: 0.9;
+        }
         .filters-shell {
-          border: 1px solid rgba(255, 255, 255, 0.14);
-          border-radius: 0px;
-          background: linear-gradient(160deg, #111111 0%, #1b1b1b 100%);
-          box-shadow: 0 16px 38px rgba(0, 0, 0, 0.35);
+          border: 1px solid rgba(201, 162, 39, 0.18);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.82);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 16px 38px rgba(0, 0, 0, 0.12);
           padding: 22px;
         }
         .search-wrapper {
@@ -143,17 +170,17 @@ export default function Products() {
         }
         .search-field {
           width: 100%;
-          border: 1px solid #3a3a3a;
+          border: 1px solid rgba(17, 24, 39, 0.16);
           border-radius: 14px;
           padding: 13px 14px 13px 44px;
           font-size: 15px;
-          color: #ffffff;
-          background: #242424;
+          color: #111827;
+          background: rgba(255, 255, 255, 0.9);
           box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
           transition: all 0.2s ease;
         }
         .search-field::placeholder {
-          color: rgba(255, 255, 255, 0.64);
+          color: rgba(17, 24, 39, 0.45);
         }
         .search-field:focus {
           outline: none;
@@ -163,9 +190,9 @@ export default function Products() {
         .category-chip {
           padding: 10px 16px;
           border-radius: 9999px;
-          border: 1px solid #3b3b3b;
-          background: #242424;
-          color: #ffffff;
+          border: 1px solid rgba(17, 24, 39, 0.16);
+          background: rgba(255, 255, 255, 0.9);
+          color: #111827;
           font-size: 13px;
           font-weight: 700;
           letter-spacing: 0.3px;
@@ -173,7 +200,7 @@ export default function Products() {
         }
         .category-chip:hover {
           border-color: rgba(201, 162, 39, 0.55);
-          background: #2c2c2c;
+          background: rgba(251, 239, 203, 0.75);
         }
         .category-chip.active {
           border-color: #c9a227;
@@ -185,8 +212,8 @@ export default function Products() {
           animation: fadeInUp 0.6s ease-out forwards;
           opacity: 0;
           backdrop-filter: blur(10px);
-          background: rgba(255, 255, 255, 0.7);
-          border: 1px solid rgba(201, 162, 39, 0.1);
+          background: rgba(255, 255, 255, 0.84);
+          border: 1px solid rgba(201, 162, 39, 0.14);
           border-radius: 16px;
           transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
           position: relative;
@@ -361,15 +388,18 @@ export default function Products() {
       <Navbar showFitOn={true} isDarkBg={true} />
 
       {/* Hero Section */}
-      <div className="w-full h-40 relative overflow-hidden flex items-center justify-center pt-20" style={{background: '#C9A227'}}>
-        <div className="text-center">
-          <h1 className="text-4xl font-black mb-4" style={{color: '#0B0B0B', letterSpacing: '2px'}}>PRODUCTS</h1>
+      <div className="products-hero w-full h-44 relative overflow-hidden flex items-center justify-center pt-20">
+        <div className="text-center px-6">
+          <p className="text-xs uppercase tracking-[0.35em] mb-3" style={{color: 'rgba(118, 83, 18, 0.9)'}}>Smart Fashion Styling</p>
+          <h1 className="text-4xl font-black mb-2 products-hero-title">PRODUCTS</h1>
+          <p className="text-sm" style={{color: 'rgba(17, 24, 39, 0.72)'}}>Premium styles curated for your look</p>
           
         </div>
+        <div className="hero-ash-band" aria-hidden="true" />
       </div>
 
       {/* Filters Section */}
-      <div className="px-8 py-12">
+      <div className="products-shell px-8 py-12">
         <div className="max-w-6xl mx-auto">
           {/* Search + Category Filters */}
           <div className="filters-shell mb-12">
