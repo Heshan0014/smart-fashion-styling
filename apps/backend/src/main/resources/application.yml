@@ -1,0 +1,85 @@
+# spring:
+#   application:
+#     name: smart-fashion-backend
+  
+#   # PostgreSQL Configuration (RECOMMENDED for AI system)
+#   datasource:
+#     url: jdbc:postgresql://localhost:5432/smart_fashion
+#     username: postgres
+#     password: your_password
+#     driver-class-name: org.postgresql.Driver
+  
+#   jpa:
+#     hibernate:
+#       ddl-auto: update
+#     properties:
+#       hibernate:
+#         dialect: org.hibernate.dialect.PostgreSQLDialect
+#         format_sql: true
+#     show-sql: false
+  
+#   # MongoDB Configuration (Optional - for user preferences and AI data)
+#   data:
+#     mongodb:
+#       uri: mongodb://localhost:27017/smart_fashion_ai
+#       auto-index-creation: true
+
+# server:
+#   port: 8080
+#   servlet:
+#     context-path: /api
+
+# # JWT Configuration
+# jwt:
+#   secret: your-super-secret-key-change-in-production-minimum-32-characters-long
+#   expiration: 86400000 # 24 hours in milliseconds
+#   refresh-token-expiration: 604800000 # 7 days in milliseconds
+
+# logging:
+#   level:
+#     root: INFO
+#     com.smartfashion: DEBUG
+
+
+spring:
+  application:
+    name: smart-fashion-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smart_fashion
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+
+
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+jwt:
+  secret: aB9$xK#mL2@pQr5!wE7*tY3&vZ8(jX)nC4dF6gH0iJ1mN3oP5qR7sT9uV1wX3yZ5aBcDeFgHiJk
+  expiration: 86400000
+  refresh-token-expiration: 604800000
+
+logging:
+  level:
+    root: WARN
+    com.smartfashion: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
+
+# Application-specific Configuration
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:3000}
