@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import sellerAPI from "../../services/sellerAPI";
+import adminPhoto from "../../assets/logo2.jpeg";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -115,7 +116,7 @@ export default function AdminDashboard() {
       const response = await sellerAPI.approveSeller(id);
       console.log("Approval response:", response);
       
-      alert("✅ Seller approved successfully!");
+      alert("Seller approved successfully!");
       
       // Refresh the data
       await fetchSellerRequests();
@@ -123,7 +124,7 @@ export default function AdminDashboard() {
       setShowModal(false);
     } catch (error) {
       console.error("Error approving seller:", error);
-      alert("❌ Failed to approve seller: " + error.message);
+      alert("Failed to approve seller: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -141,11 +142,11 @@ export default function AdminDashboard() {
     try {
       setLoading(true);
       await sellerAPI.resetSellerPassword(id, newPassword);
-      alert(`✅ Password reset successfully! New password: ${newPassword}`);
+      alert(`Password reset successfully! New password: ${newPassword}`);
       setShowModal(false);
     } catch (error) {
       console.error("Error resetting password:", error);
-      alert("❌ Failed to reset password: " + error.message);
+      alert("Failed to reset password: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -154,7 +155,7 @@ export default function AdminDashboard() {
   const getStatusBadge = (status) => {
     // All seller_requests records are pending (no status field exists)
     // Show "Pending" badge for all records
-    return <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">⏳ Pending</span>;
+    return <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">Pending</span>;
   };
 
   const fetchCustomers = async () => {
@@ -240,7 +241,7 @@ export default function AdminDashboard() {
         throw new Error('Failed to delete customer');
       }
 
-      alert('✅ Customer deleted successfully!');
+      alert('Customer deleted successfully!');
       await fetchCustomers(); // Refresh the list
     } catch (error) {
       console.error("Error deleting customer:", error);
@@ -291,7 +292,7 @@ export default function AdminDashboard() {
         throw new Error('Failed to update customer');
       }
 
-      alert('✅ Customer updated successfully!');
+      alert('Customer updated successfully!');
       setShowCustomerModal(false);
       setEditingCustomer(null);
       await fetchCustomers(); // Refresh the list
@@ -312,21 +313,292 @@ export default function AdminDashboard() {
   }
 
   const menuItems = [
-    { id: "analytics", label: "Analytics", icon: "📊" },
-    { id: "customers", label: "Customers", icon: "👥" },
-    { id: "shops", label: "Shops", icon: "🏪" },
-    { id: "orders", label: "Orders", icon: "📦" },
-    { id: "notifications", label: "Notifications", icon: "🔔" }
+    { id: "analytics", label: "Analytics" },
+    { id: "customers", label: "Customers" },
+    { id: "shops", label: "Shops" },
+    { id: "orders", label: "Orders" },
+    { id: "notifications", label: "Notifications" }
   ];
 
+  const adminDisplayName = "Admin";
+  const adminInitial = adminDisplayName.charAt(0).toUpperCase();
+
+  const analyticsCards = [
+    { label: "Total Revenue", value: "$128.4K", delta: "+12.6%" },
+    { label: "Active Customers", value: "5,284", delta: "+8.2%" },
+    { label: "Conversion Rate", value: "4.83%", delta: "+0.9%" },
+    { label: "Avg. Order Value", value: "$74.20", delta: "+3.1%" }
+  ];
+
+  const monthlyRevenueBars = [46, 54, 49, 63, 58, 72, 76, 69, 84, 88, 81, 93];
+
+  const sampleOrders = [
+    { id: "ORD-2418", customer: "Amara Lewis", total: "$182.40", status: "Processing", date: "2026-04-02" },
+    { id: "ORD-2419", customer: "Noah Ahmed", total: "$96.00", status: "Shipped", date: "2026-04-02" },
+    { id: "ORD-2420", customer: "Priya Sen", total: "$245.20", status: "Delivered", date: "2026-04-01" },
+    { id: "ORD-2421", customer: "Lucas Kim", total: "$131.50", status: "Pending", date: "2026-04-01" }
+  ];
+
+  const notificationsData = [
+    { title: "Low Inventory Alert", message: "Denim Jacket stock has dropped below 20 units.", time: "5 min ago", level: "High" },
+    { title: "Seller Verification", message: "3 new seller applications are ready for review.", time: "22 min ago", level: "Medium" },
+    { title: "Checkout Performance", message: "Payment success rate improved by 2.4% today.", time: "1 hour ago", level: "Info" },
+    { title: "Support Queue", message: "12 customer tickets remain unresolved.", time: "2 hours ago", level: "Medium" }
+  ];
+  const pieSegments = [
+    { label: "Organic Search", value: 42, color: "#3B82F6" },
+    { label: "Direct", value: 28, color: "#10B981" },
+    { label: "Social", value: 18, color: "#F59E0B" },
+    { label: "Referral", value: 12, color: "#EF4444" }
+  ];
+
+  let pieOffset = 0;
+  const pieGradient = `conic-gradient(${pieSegments
+    .map((segment) => {
+      const start = pieOffset;
+      pieOffset += segment.value;
+      return `${segment.color} ${start}% ${pieOffset}%`;
+    })
+    .join(", ")})`;
+
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="admin-dashboard min-h-screen flex">
+      <style>{`
+        .admin-dashboard {
+          font-family: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+          background:
+            radial-gradient(1100px 520px at -6% -6%, rgba(201, 162, 39, 0.16) 0%, transparent 52%),
+            radial-gradient(940px 460px at 100% 0%, rgba(255, 255, 255, 0.72) 0%, transparent 58%),
+            linear-gradient(150deg, #f8f8f8 0%, #ffffff 45%, #f1f1f1 100%);
+          color: #171717;
+        }
+        .admin-sidebar {
+          width: 16rem;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.58) 100%);
+          border-right: 1px solid rgba(201, 162, 39, 0.26);
+          box-shadow: 10px 0 26px rgba(15, 23, 42, 0.1);
+          color: #111827;
+          position: relative;
+          backdrop-filter: blur(14px);
+        }
+        .admin-sidebar-header {
+          border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+        }
+        .admin-nav-btn {
+          border: 1px solid rgba(15, 23, 42, 0.08);
+          background: rgba(255, 255, 255, 0.48);
+          color: #111827;
+        }
+        .admin-nav-btn:hover {
+          background: rgba(255, 255, 255, 0.82);
+          border-color: rgba(201, 162, 39, 0.42);
+          transform: translateX(2px);
+        }
+        .admin-nav-btn.active {
+          background: linear-gradient(135deg, rgba(201, 162, 39, 0.9) 0%, rgba(224, 192, 88, 0.92) 100%);
+          color: #0f172a;
+          border-color: rgba(201, 162, 39, 0.8);
+          box-shadow: 0 10px 20px rgba(201, 162, 39, 0.26);
+        }
+        .admin-logout {
+          border: 1px solid rgba(15, 23, 42, 0.14);
+          background: rgba(255, 255, 255, 0.54);
+          color: #111827;
+        }
+        .admin-logout:hover {
+          background: rgba(248, 113, 113, 0.2);
+          border-color: rgba(239, 68, 68, 0.45);
+        }
+        .admin-topbar {
+          background: linear-gradient(120deg, rgba(255, 255, 255, 0.82) 0%, rgba(248, 244, 233, 0.78) 100%);
+          color: #111827;
+          border-bottom: 1px solid rgba(201, 162, 39, 0.36);
+          box-shadow: 0 16px 28px rgba(15, 23, 42, 0.08);
+          backdrop-filter: blur(12px);
+        }
+        .admin-topbar-analytics {
+          width: calc(100% - 52px);
+          margin-left: 26px;
+          margin-top: 12px;
+          border: 1px solid rgba(201, 162, 39, 0.34);
+          border-radius: 18px;
+        }
+        .admin-topbar p {
+          color: rgba(17, 24, 39, 0.66);
+        }
+        .admin-dashboard .bg-white {
+          background: rgba(255, 255, 255, 0.72) !important;
+          border: 1px solid rgba(201, 162, 39, 0.2) !important;
+          backdrop-filter: blur(12px);
+        }
+        .admin-dashboard .bg-gray-100 {
+          background: rgba(255, 255, 255, 0.78) !important;
+        }
+        .admin-dashboard .text-gray-500,
+        .admin-dashboard .text-gray-600,
+        .admin-dashboard .text-gray-700,
+        .admin-dashboard .text-gray-800 {
+          color: rgba(17, 24, 39, 0.86) !important;
+        }
+        .admin-dashboard .border-gray-200,
+        .admin-dashboard .border-gray-300 {
+          border-color: rgba(17, 24, 39, 0.12) !important;
+        }
+        .admin-dashboard .border-t,
+        .admin-dashboard .border-b-2 {
+          border-color: rgba(17, 24, 39, 0.14) !important;
+        }
+        .admin-dashboard input,
+        .admin-dashboard select {
+          background: rgba(255, 255, 255, 0.9) !important;
+          border-color: rgba(17, 24, 39, 0.16) !important;
+          color: #111827 !important;
+        }
+        .admin-dashboard input::placeholder {
+          color: rgba(17, 24, 39, 0.5);
+        }
+        .admin-dashboard input:focus,
+        .admin-dashboard select:focus {
+          border-color: rgba(201, 162, 39, 0.72) !important;
+          box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.2) !important;
+        }
+        .admin-dashboard label {
+          color: rgba(17, 24, 39, 0.9) !important;
+        }
+        .admin-dashboard table thead {
+          background: rgba(255, 255, 255, 0.84) !important;
+        }
+        .admin-dashboard table tbody tr:hover {
+          background: rgba(201, 162, 39, 0.1) !important;
+        }
+        .admin-dashboard .admin-table-action {
+          background: linear-gradient(135deg, rgba(201, 162, 39, 0.95) 0%, rgba(224, 192, 88, 0.95) 100%);
+          color: #111827;
+          border: 1px solid rgba(201, 162, 39, 0.9);
+        }
+        .admin-dashboard .admin-table-action:hover {
+          filter: brightness(1.05);
+          box-shadow: 0 10px 20px rgba(201, 162, 39, 0.3);
+        }
+        .admin-overlay {
+          background: rgba(15, 23, 42, 0.3);
+          backdrop-filter: blur(4px);
+        }
+        .admin-dashboard .admin-modal-header {
+          background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 244, 233, 0.9) 100%);
+          color: #111827;
+          border-bottom: 1px solid rgba(201, 162, 39, 0.36);
+        }
+        .admin-dashboard h1,
+        .admin-dashboard h2,
+        .admin-dashboard h3,
+        .admin-dashboard th {
+          font-family: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+          letter-spacing: 0.2px;
+        }
+        .admin-profile-chip {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 14px;
+          border-radius: 9999px;
+          border: 1px solid rgba(17, 24, 39, 0.12);
+          background: rgba(255, 255, 255, 0.78);
+        }
+        .admin-avatar {
+          width: 38px;
+          height: 38px;
+          border-radius: 9999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 700;
+          color: #111827;
+          background: linear-gradient(135deg, rgba(201, 162, 39, 0.9) 0%, rgba(224, 192, 88, 0.95) 100%);
+          border: 1px solid rgba(201, 162, 39, 0.95);
+          overflow: hidden;
+        }
+        .admin-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .analytics-metric {
+          background: rgba(255, 255, 255, 0.82);
+          border: 1px solid rgba(201, 162, 39, 0.28);
+          box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+        }
+        .analytics-bars {
+          display: grid;
+          grid-template-columns: repeat(12, minmax(0, 1fr));
+          gap: 14px;
+          align-items: end;
+          height: 220px;
+        }
+        .analytics-bar {
+          width: 8px;
+          margin: 0 auto;
+          border-radius: 10px 10px 4px 4px;
+          background: linear-gradient(180deg, rgba(201, 162, 39, 0.34) 0%, rgba(179, 141, 45, 0.2) 100%);
+          border: 1px solid rgba(201, 162, 39, 0.28);
+          box-shadow: 0 2px 8px rgba(201, 162, 39, 0.1);
+          backdrop-filter: blur(2px);
+        }
+        .pie-shell {
+          width: 168px;
+          height: 168px;
+          margin: 0 auto;
+          border-radius: 9999px;
+          position: relative;
+          box-shadow: 0 14px 26px rgba(15, 23, 42, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+          backdrop-filter: blur(6px);
+        }
+        .pie-shell::after {
+          content: "";
+          position: absolute;
+          width: 68px;
+          height: 68px;
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.72);
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          border: 1px solid rgba(17, 24, 39, 0.08);
+          backdrop-filter: blur(8px);
+        }
+        .pie-center {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 2;
+          text-align: center;
+        }
+        .pie-center-value {
+          font-size: 14px;
+          font-weight: 700;
+          color: #1f2937;
+          line-height: 1;
+        }
+        .pie-center-label {
+          font-size: 9px;
+          color: rgba(31, 41, 55, 0.7);
+          margin-top: 4px;
+        }
+        .notification-card {
+          background: rgba(255, 255, 255, 0.78);
+          border: 1px solid rgba(201, 162, 39, 0.2);
+          border-radius: 14px;
+          padding: 16px;
+        }
+      `}</style>
       {/* Sidebar */}
-      <div className="w-64 bg-gradient-to-b from-[#7a5a34] to-[#6b4a24] text-white shadow-lg">
+      <div className="admin-sidebar">
         {/* Sidebar Header */}
-        <div className="p-6 border-b border-amber-600">
-          <h2 className="text-2xl font-bold">👨‍💼 Admin</h2>
-          <p className="text-amber-100 text-sm mt-1">Dashboard</p>
+        <div className="admin-sidebar-header p-6">
+          <h2 className="text-2xl font-bold">Admin</h2>
+          <p className="text-sm mt-1" style={{ color: 'rgba(17, 24, 39, 0.7)' }}>Dashboard</p>
         </div>
 
         {/* Navigation Menu */}
@@ -335,25 +607,23 @@ export default function AdminDashboard() {
             <button
               key={item.id}
               onClick={() => setCurrentSection(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left font-semibold ${
+              className={`admin-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left font-semibold ${
                 currentSection === item.id
-                  ? "bg-amber-600 shadow-md"
-                  : "hover:bg-amber-600 hover:shadow-md"
+                  ? "active"
+                  : ""
               }`}
             >
-              <span className="text-xl">{item.icon}</span>
               <span>{item.label}</span>
             </button>
           ))}
         </nav>
 
         {/* Logout Button */}
-        <div className="absolute bottom-0 w-64 px-4 py-4 border-t border-amber-600">
+        <div className="absolute bottom-0 w-64 px-4 py-4 border-t" style={{ borderColor: 'rgba(17, 24, 39, 0.1)' }}>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-red-500 hover:bg-red-600 transition-colors duration-200 text-white font-semibold"
+            className="admin-logout w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 font-semibold"
           >
-            <span className="text-xl">🚪</span>
             <span>Sign Out</span>
           </button>
         </div>
@@ -362,21 +632,35 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#7a5a34] to-[#8b6a44] text-white py-6 px-8 shadow">
-          <h1 className="text-3xl font-bold">
-            {currentSection === "shops" && "Seller Requests Management"}
-            {currentSection === "customers" && "👥 Customers Management"}
-            {currentSection === "analytics" && "📊 Analytics"}
-            {currentSection === "orders" && "📦 Orders"}
-            {currentSection === "notifications" && "🔔 Notifications"}
-          </h1>
-          <p className="text-amber-50 mt-1">
-            {currentSection === "shops" && "Review and manage seller registration requests"}
-            {currentSection === "customers" && "View all registered customers in the system"}
-            {currentSection === "analytics" && "View system analytics and insights"}
-            {currentSection === "orders" && "Manage all orders"}
-            {currentSection === "notifications" && "View system notifications"}
-          </p>
+        <div className="admin-topbar admin-topbar-analytics py-6 px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">
+                {currentSection === "shops" && "Seller Requests Management"}
+                {currentSection === "customers" && "Customers Management"}
+                {currentSection === "analytics" && "Analytics"}
+                {currentSection === "orders" && "Orders"}
+                {currentSection === "notifications" && "Notifications"}
+              </h1>
+              <p className="mt-1">
+                {currentSection === "shops" && "Review and manage seller registration requests"}
+                {currentSection === "customers" && "View all registered customers in the system"}
+                {currentSection === "analytics" && "View system analytics and insights"}
+                {currentSection === "orders" && "Manage all orders"}
+                {currentSection === "notifications" && "View system notifications"}
+              </p>
+            </div>
+
+            <div className="admin-profile-chip self-start sm:self-auto">
+              <div className="admin-avatar">
+                <img src={adminPhoto} alt="Admin" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-800 leading-tight">Hi! Admin</p>
+                <p className="text-xs text-gray-500 leading-tight">Administrator</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Dashboard Content */}
@@ -461,7 +745,7 @@ export default function AdminDashboard() {
                             setSelectedRequest(request);
                             setShowModal(true);
                           }}
-                          className="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition"
+                          className="admin-table-action px-3 py-1 rounded-lg text-sm transition"
                         >
                           View Details
                         </button>
@@ -528,17 +812,17 @@ export default function AdminDashboard() {
                             <td className="px-6 py-4 text-center space-x-2">
                               <button
                                 onClick={() => handleEditCustomer(customer)}
-                                className="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition"
+                                className="admin-table-action px-3 py-1 rounded-lg text-sm transition"
                                 title="Edit customer"
                               >
-                                ✏️ Edit
+                                Edit
                               </button>
                               <button
                                 onClick={() => handleDeleteCustomer(customer.id)}
                                 className="px-3 py-1 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition"
                                 title="Delete customer"
                               >
-                                🗑️ Delete
+                                Delete
                               </button>
                             </td>
                           </tr>
@@ -555,20 +839,142 @@ export default function AdminDashboard() {
             </>
           )}
 
-          {/* OTHER SECTIONS - Placeholder */}
-          {["analytics", "orders", "notifications"].includes(currentSection) && (
-            <div className="bg-white rounded-lg shadow p-8 text-center">
-              <p className="text-gray-500 text-lg">This section is coming soon</p>
-            </div>
+          {/* ANALYTICS SECTION */}
+          {currentSection === "analytics" && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+                {analyticsCards.map((card) => (
+                  <div key={card.label} className="analytics-metric rounded-xl p-5">
+                    <p className="text-sm text-gray-600">{card.label}</p>
+                    <p className="text-3xl font-bold text-gray-800 mt-2">{card.value}</p>
+                    <p className="text-xs font-semibold text-emerald-600 mt-2">{card.delta} vs last month</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl shadow p-6 xl:col-span-2">
+                  <div className="flex items-center justify-between mb-5">
+                    <h3 className="text-lg font-semibold text-gray-800">Monthly Revenue</h3>
+                    <p className="text-xs text-gray-500">Last 12 months</p>
+                  </div>
+                  <div className="analytics-bars">
+                    {monthlyRevenueBars.map((height, index) => (
+                      <div
+                        key={index}
+                        className="analytics-bar"
+                        style={{ height: `${height}%` }}
+                        title={`Month ${index + 1}: ${height}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow p-6">
+                  <div className="flex items-center justify-between mb-5">
+                    <h3 className="text-lg font-semibold text-gray-800">Channel Distribution</h3>
+                    <p className="text-xs text-gray-500">Pie chart</p>
+                  </div>
+                  <div className="pie-shell" style={{ background: pieGradient }}>
+                    <div className="pie-center">
+                      <p className="pie-center-value">100%</p>
+                      <p className="pie-center-label">Traffic</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2 mt-6">
+                    {pieSegments.map((item) => (
+                      <div key={item.label} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full" style={{ background: item.color }} />
+                          <span className="text-xs font-semibold text-gray-700">{item.label}</span>
+                        </div>
+                        <span className="text-xs text-gray-600 font-semibold">{item.value}%</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-600">
+                    <p>Top source: Organic Search (42%)</p>
+                    <p className="mt-1">Audience growth this week: +6.4%</p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ORDERS SECTION */}
+          {currentSection === "orders" && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="analytics-metric rounded-xl p-5">
+                  <p className="text-sm text-gray-600">Today Orders</p>
+                  <p className="text-3xl font-bold text-gray-800 mt-2">148</p>
+                </div>
+                <div className="analytics-metric rounded-xl p-5">
+                  <p className="text-sm text-gray-600">Pending Shipment</p>
+                  <p className="text-3xl font-bold text-gray-800 mt-2">37</p>
+                </div>
+                <div className="analytics-metric rounded-xl p-5">
+                  <p className="text-sm text-gray-600">On-time Delivery</p>
+                  <p className="text-3xl font-bold text-gray-800 mt-2">96.2%</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-100 border-b-2 border-gray-300">
+                      <tr>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Order ID</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Customer</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sampleOrders.map((order) => (
+                        <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-50">
+                          <td className="px-6 py-4 text-sm font-semibold text-gray-800">{order.id}</td>
+                          <td className="px-6 py-4 text-sm text-gray-700">{order.customer}</td>
+                          <td className="px-6 py-4 text-sm text-gray-700">{order.total}</td>
+                          <td className="px-6 py-4 text-sm text-gray-700">{order.status}</td>
+                          <td className="px-6 py-4 text-sm text-gray-700">{order.date}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* NOTIFICATIONS SECTION */}
+          {currentSection === "notifications" && (
+            <>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {notificationsData.map((notice, index) => (
+                  <div key={`${notice.title}-${index}`} className="notification-card">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="text-base font-semibold text-gray-800">{notice.title}</h3>
+                        <p className="text-sm text-gray-600 mt-1">{notice.message}</p>
+                      </div>
+                      <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700 font-semibold">{notice.level}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-3">{notice.time}</p>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>
 
       {/* Edit Customer Modal - Full Profile */}
       {showCustomerModal && editingCustomer && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="admin-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="bg-gradient-to-r from-[#7a5a34] to-[#8b6a44] text-white p-6 flex justify-between items-center sticky top-0">
+            <div className="admin-modal-header p-6 flex justify-between items-center sticky top-0">
               <div>
                 <h2 className="text-2xl font-bold">Customer Profile</h2>
                 <p className="text-sm opacity-90">ID: {editingCustomer.id} | {editingCustomer.username}</p>
@@ -588,7 +994,7 @@ export default function AdminDashboard() {
               
               {/* Account Information Section */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-4 border-b-2 pb-2">👤 Account Information</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-4 border-b-2 pb-2">Account Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Username (Read-only)</label>
@@ -622,7 +1028,7 @@ export default function AdminDashboard() {
 
               {/* Personal Information Section */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-4 border-b-2 pb-2">👥 Personal Information</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-4 border-b-2 pb-2">Personal Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
@@ -657,7 +1063,7 @@ export default function AdminDashboard() {
 
               {/* Fashion Preferences Section */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-4 border-b-2 pb-2">👗 Fashion Preferences</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-4 border-b-2 pb-2">Fashion Preferences</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Body Type</label>
@@ -711,7 +1117,7 @@ export default function AdminDashboard() {
 
               {/* Measurements Section */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-4 border-b-2 pb-2">📏 Body Measurements</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-4 border-b-2 pb-2">Body Measurements</h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Height (cm)</label>
@@ -795,7 +1201,7 @@ export default function AdminDashboard() {
 
               {/* Account Status Section */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-4 border-b-2 pb-2">🔐 Account Status</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-4 border-b-2 pb-2">Account Status</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center">
                     <input
@@ -822,7 +1228,7 @@ export default function AdminDashboard() {
 
               {/* Timestamps Section */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-4 border-b-2 pb-2">📅 Activity Information</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-4 border-b-2 pb-2">Activity Information</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="font-semibold text-gray-700">Created:</span>
@@ -844,7 +1250,7 @@ export default function AdminDashboard() {
                   type="submit"
                   className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition"
                 >
-                  ✓ Save Changes
+                  Save Changes
                 </button>
                 <button
                   type="button"
@@ -863,9 +1269,9 @@ export default function AdminDashboard() {
       )}
 
       {showModal && selectedRequest && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="admin-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
-            <div className="sticky top-0 bg-gradient-to-r from-[#7a5a34] to-[#8b6a44] text-white p-6 flex justify-between items-center">
+            <div className="admin-modal-header sticky top-0 p-6 flex justify-between items-center">
               <h2 className="text-2xl font-bold">{selectedRequest.shopName}</h2>
               <button
                 onClick={() => setShowModal(false)}
@@ -878,7 +1284,7 @@ export default function AdminDashboard() {
             <div className="p-6 space-y-4">
               {/* Shop Info */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-3">📋 Shop Information</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-3">Shop Information</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div><span className="font-semibold">Category:</span> {selectedRequest.category}</div>
                   <div><span className="font-semibold">Business Type:</span> {selectedRequest.businessType}</div>
@@ -889,7 +1295,7 @@ export default function AdminDashboard() {
 
               {/* Contact Info */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-3">📞 Contact Information</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-3">Contact Information</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div><span className="font-semibold">Email:</span> {selectedRequest.email}</div>
                   <div><span className="font-semibold">Phone:</span> {selectedRequest.phone}</div>
@@ -900,7 +1306,7 @@ export default function AdminDashboard() {
 
               {/* Bank Info */}
               <div>
-                <h3 className="text-lg font-bold text-[#7a5a34] mb-3">💳 Bank Account</h3>
+                <h3 className="text-lg font-bold text-[#B68D2A] mb-3">Bank Account</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div><span className="font-semibold">Account Name:</span> {selectedRequest.bankAccountName}</div>
                   <div><span className="font-semibold">IFSC:</span> {selectedRequest.bankIFSC}</div>
@@ -910,7 +1316,7 @@ export default function AdminDashboard() {
               {/* Social Media */}
               {selectedRequest.website && (
                 <div>
-                  <h3 className="text-lg font-bold text-[#7a5a34] mb-3">🌐 Social Media</h3>
+                  <h3 className="text-lg font-bold text-[#B68D2A] mb-3">Social Media</h3>
                   <div className="text-sm space-y-1">
                     {selectedRequest.website && <div><span className="font-semibold">Website:</span> {selectedRequest.website}</div>}
                     {selectedRequest.instagram && <div><span className="font-semibold">Instagram:</span> @{selectedRequest.instagram}</div>}
@@ -922,8 +1328,8 @@ export default function AdminDashboard() {
               {/* Status Info */}
               <div className="border-t pt-4">
                 <p className="text-sm"><span className="font-semibold">Status:</span> {getStatusBadge(selectedRequest.status)}</p>
-                {selectedRequest.approvedAt && <p className="text-sm text-green-600">✓ Approved on: {selectedRequest.approvedAt}</p>}
-                {selectedRequest.rejectedAt && <p className="text-sm text-red-600">✕ Rejected on: {selectedRequest.rejectedAt}</p>}
+                {selectedRequest.approvedAt && <p className="text-sm text-green-600">Approved on: {selectedRequest.approvedAt}</p>}
+                {selectedRequest.rejectedAt && <p className="text-sm text-red-600">Rejected on: {selectedRequest.rejectedAt}</p>}
                 {selectedRequest.rejectionReason && <p className="text-sm text-red-600">Reason: {selectedRequest.rejectionReason}</p>}
               </div>
             </div>
@@ -935,7 +1341,7 @@ export default function AdminDashboard() {
                   onClick={() => handleApprove(selectedRequest.id)}
                   className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-semibold transition"
                 >
-                  ✓ Approve
+                  Approve
                 </button>
                 <button
                   onClick={() => {
@@ -945,14 +1351,14 @@ export default function AdminDashboard() {
                   }}
                   className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-semibold transition"
                 >
-                  ✕ Reject & Delete
+                  Reject and Delete
                 </button>
                 <button
                   onClick={() => handleResetPassword(selectedRequest.id)}
                   className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-semibold transition"
                   title="Reset seller password"
                 >
-                  🔑 Reset Password
+                  Reset Password
                 </button>
               </div>
             )}

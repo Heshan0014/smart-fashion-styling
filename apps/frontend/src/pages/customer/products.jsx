@@ -1,7 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import Navbar from "../../components/Navbar";
+import g1 from "../../assets/g1.jpg";
+import g2 from "../../assets/g2.jpg";
+import g3 from "../../assets/g3.jpg";
+import g4 from "../../assets/g4.png";
+import g5 from "../../assets/g5.png";
+import g6 from "../../assets/g6.png";
+import g7 from "../../assets/g7.png";
+import g8 from "../../assets/g8.png";
+import g9 from "../../assets/g9.png";
+import g10 from "../../assets/g10.png";
+import g11 from "../../assets/g11.png";
+import g12 from "../../assets/g12.png";
+import g13 from "../../assets/g13.png";
+import m1 from "../../assets/m1.png";
+import m2 from "../../assets/m2.png";
+import m3 from "../../assets/m3.png";
+import m5 from "../../assets/m5.png";
+import m6 from "../../assets/m6.png";
+import m7 from "../../assets/m7.png";
+import m8 from "../../assets/m8.png";
+import m9 from "../../assets/m9.png";
+import m10 from "../../assets/m10.png";
+import m11 from "../../assets/m11.png";
 
 const productNames = [
   'Casual Denim Jacket', 'Floral Summer Dress', 'Classic White Shirt', 'Black Leather Jacket',
@@ -19,11 +42,41 @@ const products = new Array(50).fill(null).map((_, i) => ({
   price: Math.floor(Math.random() * (150 - 20 + 1)) + 20
 }));
 
+const productImages = [
+  g1,
+  g2,
+  g3,
+  g4,
+  g5,
+  g6,
+  g7,
+  g8,
+  g9,
+  g10,
+  g11,
+  g12,
+  g13,
+  m1,
+  m2,
+  m3,
+  m5,
+  m6,
+  m7,
+  m8,
+  m9,
+  m10,
+  m11
+];
+
 export default function Products() {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Get search query from URL parameters
   useEffect(() => {
@@ -69,12 +122,248 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-white">
+      <style>{`
+        @keyframes fadeInUp {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes floatUpDown {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        .filters-shell {
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: 0px;
+          background: linear-gradient(160deg, #111111 0%, #1b1b1b 100%);
+          box-shadow: 0 16px 38px rgba(0, 0, 0, 0.35);
+          padding: 22px;
+        }
+        .search-wrapper {
+          position: relative;
+        }
+        .search-field {
+          width: 100%;
+          border: 1px solid #3a3a3a;
+          border-radius: 14px;
+          padding: 13px 14px 13px 44px;
+          font-size: 15px;
+          color: #ffffff;
+          background: #242424;
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+          transition: all 0.2s ease;
+        }
+        .search-field::placeholder {
+          color: rgba(255, 255, 255, 0.64);
+        }
+        .search-field:focus {
+          outline: none;
+          border-color: rgba(201, 162, 39, 0.75);
+          box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
+        }
+        .category-chip {
+          padding: 10px 16px;
+          border-radius: 9999px;
+          border: 1px solid #3b3b3b;
+          background: #242424;
+          color: #ffffff;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          transition: all 0.2s ease;
+        }
+        .category-chip:hover {
+          border-color: rgba(201, 162, 39, 0.55);
+          background: #2c2c2c;
+        }
+        .category-chip.active {
+          border-color: #c9a227;
+          background: linear-gradient(135deg, #c9a227 0%, #e2c85a 100%);
+          color: #121212;
+          box-shadow: 0 8px 20px rgba(201, 162, 39, 0.26);
+        }
+        .product-card {
+          animation: fadeInUp 0.6s ease-out forwards;
+          opacity: 0;
+          backdrop-filter: blur(10px);
+          background: rgba(255, 255, 255, 0.7);
+          border: 1px solid rgba(201, 162, 39, 0.1);
+          border-radius: 16px;
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          position: relative;
+          overflow: hidden;
+        }
+        .product-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+          transition: left 0.5s;
+          z-index: 1;
+        }
+        .product-card:hover::before {
+          left: 100%;
+        }
+        .product-card:hover {
+          transform: translateY(-12px) scale(1.02);
+          background: rgba(255, 255, 255, 0.88);
+          border-color: rgba(201, 162, 39, 0.3);
+          box-shadow: 0 20px 40px rgba(201, 162, 39, 0.2), 0 0 40px rgba(201, 162, 39, 0.15);
+        }
+        .product-image-wrapper {
+          position: relative;
+          height: 280px;
+          border-radius: 12px;
+          overflow: hidden;
+          margin-bottom: 16px;
+          background: linear-gradient(135deg, #f0e8dc 0%, #ede5db 100%);
+          transition: all 0.4s ease;
+        }
+        .product-image-wrapper::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(201, 162, 39, 0) 0%, rgba(201, 162, 39, 0.12) 100%);
+          pointer-events: none;
+          z-index: 2;
+        }
+        .product-card:hover .product-image-wrapper {
+          box-shadow: 0 12px 24px rgba(201, 162, 39, 0.25);
+        }
+        .product-badge {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          padding: 6px 12px;
+          border-radius: 8px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 1px;
+          background: linear-gradient(135deg, #d4423d 0%, #e8544d 100%);
+          color: #ffffff;
+          z-index: 3;
+          box-shadow: 0 4px 12px rgba(212, 66, 61, 0.25);
+        }
+        .product-info {
+          position: relative;
+          z-index: 2;
+        }
+        .product-name {
+          font-family: 'Sora', 'Manrope', sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          color: #0b0b0b;
+          letter-spacing: 0.1px;
+          line-height: 1.4;
+          transition: color 0.3s ease;
+        }
+        .product-card:hover .product-name {
+          color: #c9a227;
+        }
+        .product-category {
+          font-family: 'Manrope', sans-serif;
+          font-size: 11px;
+          color: #999999;
+          text-transform: uppercase;
+          letter-spacing: 1.2px;
+          margin-top: 8px;
+        }
+        .product-price {
+          font-family: 'Sora', 'Manrope', sans-serif;
+          font-size: 18px;
+          font-weight: 700;
+          color: #0b0b0b;
+          margin-top: 12px;
+          letter-spacing: -0.3px;
+        }
+        .product-price::before {
+          content: '$ ';
+          font-size: 13px;
+        }
+        .add-to-cart-btn {
+          width: 100%;
+          padding: 12px 14px;
+          border: 1px solid rgba(11, 11, 11, 0.08);
+          border-radius: 12px;
+          margin-top: 14px;
+          font-family: 'Manrope', sans-serif;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.9px;
+          cursor: pointer;
+          transition: all 0.24s ease;
+          background: linear-gradient(135deg, #111111 0%, #2a2a2a 100%);
+          color: #f5f1e8;
+          text-transform: uppercase;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        }
+        .add-to-cart-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.25) 45%, transparent 70%);
+          transition: left 0.4s ease;
+          z-index: 1;
+        }
+        .add-to-cart-btn:hover::before {
+          left: 100%;
+        }
+        .add-to-cart-btn:hover {
+          transform: translateY(-2px);
+          border-color: rgba(201, 162, 39, 0.45);
+          box-shadow: 0 8px 20px rgba(11, 11, 11, 0.25);
+          background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 100%);
+        }
+        .add-to-cart-btn .btn-icon {
+          font-size: 13px;
+          line-height: 1;
+          transition: transform 0.24s ease;
+        }
+        .add-to-cart-btn:hover .btn-icon {
+          transform: translateX(2px);
+        }
+        .floating-top-btn {
+          position: fixed;
+          right: 24px;
+          bottom: 28px;
+          width: 54px;
+          height: 54px;
+          border-radius: 9999px;
+          border: 1px solid rgba(201, 162, 39, 0.35);
+          background: linear-gradient(135deg, rgba(11, 11, 11, 0.96) 0%, rgba(42, 42, 42, 0.96) 100%);
+          color: #c9a227;
+          box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 80;
+          cursor: pointer;
+          animation: floatUpDown 2.5s ease-in-out infinite;
+        }
+        .floating-top-btn:hover {
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 16px 32px rgba(201, 162, 39, 0.24);
+        }
+      `}</style>
       <Navbar showFitOn={true} isDarkBg={true} />
 
       {/* Hero Section */}
-      <div className="w-full h-40 relative overflow-hidden flex items-center justify-center pt-20" style={{background: '#E8E8E8'}}>
+      <div className="w-full h-40 relative overflow-hidden flex items-center justify-center pt-20" style={{background: '#C9A227'}}>
         <div className="text-center">
-          <h1 className="text-4xl font-black mb-4" style={{color: '#0B0B0B'}}>PRODUCTS</h1>
+          <h1 className="text-4xl font-black mb-4" style={{color: '#0B0B0B', letterSpacing: '2px'}}>PRODUCTS</h1>
           
         </div>
       </div>
@@ -82,67 +371,63 @@ export default function Products() {
       {/* Filters Section */}
       <div className="px-8 py-12">
         <div className="max-w-6xl mx-auto">
-          {/* Search Bar */}
-          <div className="mb-8 relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border-2 rounded-lg px-6 py-3 pl-12 text-lg focus:outline-none"
-              style={{borderColor: '#D0D0D0', color: '#0B0B0B'}}
-              onFocus={(e) => {e.target.style.borderColor = '#C9A227'; e.target.style.boxShadow = '0 0 0 2px rgba(201, 162, 39, 0.1)';}}
-              onBlur={(e) => {e.target.style.borderColor = '#D0D0D0'; e.target.style.boxShadow = 'none';}}
-            />
-            <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-xl pointer-events-none" style={{color: '#808080'}} />
-          </div>
+          {/* Search + Category Filters */}
+          <div className="filters-shell mb-12">
+            <div className="search-wrapper mb-5">
+              <input
+                type="text"
+                placeholder="Search by name or category"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-field"
+              />
+              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lg pointer-events-none" style={{color: 'rgba(255, 255, 255, 0.72)'}} />
+            </div>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-3 mb-12">
-            {['All', ...categories].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className="px-6 py-3 rounded-lg font-bold transition-all"
-                style={{
-                  background: selectedCategory === cat ? '#C9A227' : '#F5F5F5',
-                  color: selectedCategory === cat ? '#0B0B0B' : '#0B0B0B',
-                  border: selectedCategory === cat ? '2px solid #C9A227' : '2px solid #E8E8E8'
-                }}
-              >
-                {cat}
-              </button>
-            ))}
+            <div className="flex flex-wrap gap-3">
+              {['All', ...categories].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`category-chip ${selectedCategory === cat ? 'active' : ''}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Products Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-12">
             {filteredProducts.map((product, i) => (
-              <div key={i} className="group cursor-pointer transform transition-all duration-300 hover:scale-105">
-                <div className="relative h-64 rounded-xl mb-4 transition overflow-hidden shadow-md hover:shadow-2xl" style={{background: `url(${[
-                  'https://images.unsplash.com/photo-1567450489212-d37b5ba1b639?w=300&h=300&fit=crop',
-                  'https://images.unsplash.com/photo-1542272604-787c3835535d?w=300&h=300&fit=crop',
-                  'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=300&h=300&fit=crop',
-                  'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&h=300&fit=crop',
-                ][i % 4]})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+              <div key={i} className="product-card">
+                <div
+                  className="product-image-wrapper"
+                  style={{
+                    backgroundImage: `url(${productImages[i % productImages.length]})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                >
                   {i % 3 === 0 && (
-                    <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold text-white z-10" style={{background: '#D4423D'}}>
+                    <div className="product-badge">
                       SALE
                     </div>
                   )}
                 </div>
-                <h3 className="text-sm font-bold group-hover:text-yellow-500 transition" style={{color: '#0B0B0B'}}>
-                  {product.name}
-                </h3>
-                <p className="text-xs mt-2" style={{color: '#808080'}}>{product.category}</p>
-                <p className="text-lg font-black mt-2" style={{color: '#0B0B0B'}}>${product.price.toFixed(2)}</p>
-                <button 
-                  onClick={() => addToCart(product)}
-                  className="w-full text-white py-2 rounded-lg text-sm font-bold transition-all hover:opacity-90 mt-3" 
-                  style={{background: '#C9A227', color: '#0B0B0B'}}
-                >
-                  Add to Cart
-                </button>
+
+                <div className="product-info px-4 pb-4">
+                  <h3 className="product-name">{product.name}</h3>
+                  <p className="product-category">{product.category}</p>
+                  <p className="product-price">{product.price.toFixed(2)}</p>
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="add-to-cart-btn"
+                  >
+                    <span className="btn-label">Add to Cart</span>
+                    <span className="btn-icon">+</span>
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -169,6 +454,18 @@ export default function Products() {
           <p style={{color: '#808080'}}>© 2026 Smart Fashion Styling. All rights reserved.</p>
         </div>
       </footer>
+
+      <button
+        type="button"
+        className="floating-top-btn"
+        onClick={scrollToTop}
+        aria-label="Go to top"
+        title="Go to top"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
     </div>
   );
 }
